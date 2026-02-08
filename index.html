@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Will You Be My Valentine? ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#ff4f81;--dark:#1a1a1a;--soft:#fff0f5}
+*{box-sizing:border-box}
+body{margin:0;font-family:Poppins,system-ui,Arial;background:linear-gradient(180deg,#fff,#ffe6ef);color:var(--dark);overflow-x:hidden}
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px}
+h1{font-family:'Great Vibes',cursive;font-size:3.2rem;margin:0;color:var(--pink)}
+h2{margin-top:8px;font-weight:600}
+p{max-width:720px;line-height:1.6}
+.btn{padding:14px 26px;border-radius:999px;border:none;margin:12px;font-size:1.05rem;cursor:pointer;transition:.25s;box-shadow:0 8px 18px rgba(0,0,0,.15)}
+.yes{background:var(--pink);color:#fff}
+.yes:hover{transform:scale(1.08)}
+.no{background:#eee}
+.no:hover{transform:translateX(120px) translateY(-60px)}
+.card{background:white;border-radius:20px;padding:24px;box-shadow:0 14px 40px rgba(0,0,0,.15)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;width:100%;max-width:900px;margin-top:18px}
+.gallery img{width:100%;height:180px;object-fit:cover;border-radius:16px;transition:.35s}
+.gallery img:hover{transform:scale(1.05)}
+footer{padding:18px;font-size:.9rem;opacity:.7}
+canvas{position:fixed;pointer-events:none;top:0;left:0}
+.heart{position:fixed;color:var(--pink);font-size:22px;animation:float 6s linear infinite}
+@keyframes float{0%{transform:translateY(100vh) scale(.6);opacity:.8}100%{transform:translateY(-10vh) scale(1.2);opacity:0}}
+.music{position:fixed;bottom:14px;right:14px;background:white;padding:10px 16px;border-radius:30px;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<section id="hero">
+  <h1 id="herName">Hey Beautiful ❤️</h1>
+  <h2>I made something just for you...</h2>
+  <p>Scroll slowly... every part of this page is a little piece of my heart.</p>
+</section>
+
+<section>
+  <div class="card">
+    <h1>Our Story</h1>
+    <p id="story">From the moment I met you, my life started feeling lighter, happier and somehow more complete. Every laugh, every conversation, every little moment with you became my favorite memory. I didn't just fall for you... I fell for your smile, your kindness, and the way you make ordinary days feel magical.</p>
+  </div>
+</section>
+
+<section>
+  <h1>My Favorite Memories</h1>
+  <p>(Replace these photos with your own — instructions are at the bottom of the file ❤️)</p>
+  <div class="gallery">
+    <img src="https://picsum.photos/400/300?random=1">
+    <img src="https://picsum.photos/400/300?random=2">
+    <img src="https://picsum.photos/400/300?random=3">
+    <img src="https://picsum.photos/400/300?random=4">
+  </div>
+</section>
+
+<section id="question">
+  <div class="card">
+    <h1 id="bigQuestion">Will you be my Valentine?</h1>
+    <button class="btn yes" onclick="sayYes()">YES 💖</button>
+    <button class="btn no" onmouseover="runAway(this)">No</button>
+  </div>
+</section>
+
+<section id="final" class="hidden">
+  <h1>YAY!!! 🎉</h1>
+  <h2 id="finalMsg">You just made me the happiest person alive!</h2>
+  <p>I promise to keep choosing you, caring for you, annoying you, making you laugh, and loving you — today and every day after this.</p>
+</section>
+
+<div class="music" onclick="toggleMusic()">🎵 Play our song</div>
+<audio id="song" loop>
+  <!-- Replace with your song file (mp3) -->
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="confetti"></canvas>
+
+<script>
+// floating hearts
+setInterval(()=>{
+ const h=document.createElement('div');
+ h.className='heart';
+ h.innerHTML='❤';
+ h.style.left=Math.random()*100+'vw';
+ h.style.animationDuration=(4+Math.random()*3)+'s';
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),7000);
+},500);
+
+function runAway(btn){
+ const x=Math.random()*window.innerWidth*0.8;
+ const y=Math.random()*window.innerHeight*0.6;
+ btn.style.position='absolute';
+ btn.style.left=x+'px';
+ btn.style.top=y+'px';
+}
+
+function sayYes(){
+ document.getElementById('question').classList.add('hidden');
+ document.getElementById('final').classList.remove('hidden');
+ startConfetti();
+ document.getElementById('song').play();
+}
+
+// music toggle
+function toggleMusic(){
+ const s=document.getElementById('song');
+ if(s.paused)s.play();else s.pause();
+}
+
+// simple confetti
+const canvas=document.getElementById('confetti');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+let pieces=[];
+function startConfetti(){
+ for(let i=0;i<160;i++)pieces.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height- canvas.height,size:6+Math.random()*6,dy:2+Math.random()*3,dx:Math.random()*2-1});
+ requestAnimationFrame(update);
+}
+function update(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ pieces.forEach(p=>{ctx.fillStyle=`hsl(${Math.random()*360},80%,60%)`;ctx.fillRect(p.x,p.y,p.size,p.size);p.y+=p.dy;p.x+=p.dx;if(p.y>canvas.height)p.y=-20});
+ requestAnimationFrame(update);
+}
+
+// resize canvas
+window.onresize=()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+</script>
+
+<!--
+================ HOW TO PERSONALIZE =================
+1. Replace her name:
+   Find: Hey Beautiful ❤️  -> change to her name
+
+2. Add your names in the story text
+3. Replace photos:
+   Put your images in the same folder and replace the 4 image links with:
+   img src="photo1.jpg" etc.
+
+4. Add your song:
+   Place an mp3 file named song.mp3 in the same folder.
+
+5. Upload free:
+   - Go to https://pages.github.com/
+   - Create a free GitHub account
+   - New repository → Upload this file as index.html
+   - Enable GitHub Pages → You get a shareable link
+
+Send her the link on Valentine's Day ❤️
+=====================================================
+-->
+
+<footer>Made with love</footer>
+</body>
+</html>
